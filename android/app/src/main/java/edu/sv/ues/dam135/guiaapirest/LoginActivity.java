@@ -7,6 +7,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +34,18 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private SessionManager sesion;
 
+    // Al volver del registro, deja el correo recién creado en el campo de usuario.
+    private final ActivityResultLauncher<Intent> registro = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), resultado -> {
+                Intent datos = resultado.getData();
+                if (resultado.getResultCode() == RESULT_OK && datos != null) {
+                    edtUsuario.setText(datos.getStringExtra(RegistroActivity.EXTRA_CORREO));
+                    edtClave.setText("");
+                    edtClave.requestFocus();
+                    mostrarMensaje(R.string.registro_exito);
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         sesion = new SessionManager(this);
 
         buttonIngresar.setOnClickListener(v -> iniciarSesion());
+        findViewById(R.id.buttonCrearCuenta).setOnClickListener(
+                v -> registro.launch(new Intent(this, RegistroActivity.class)));
         edtClave.setOnEditorActionListener((vista, accion, evento) -> {
             if (accion == EditorInfo.IME_ACTION_DONE) {
                 iniciarSesion();

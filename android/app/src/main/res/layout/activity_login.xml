@@ -80,11 +80,22 @@
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
         android:text="@string/login_boton_ingresar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonCrearCuenta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilClave"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintTop_toBottomOf="@id/tilClave" />
+
+    <Button
+        android:id="@+id/buttonCrearCuenta"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/login_crear_cuenta"
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonIngresar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -92,8 +103,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonIngresar" />
+        app:layout_constraintTop_toBottomOf="@id/buttonCrearCuenta" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,11 @@
         </activity>
 
         <activity
+            android:name=".RegistroActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ProductosActivity"
             android:exported="false" />
     </application>

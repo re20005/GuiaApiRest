@@ -16,11 +16,23 @@ import java.util.List;
 import edu.sv.ues.dam135.guiaapirest.models.Producto;
 
 /**
- * Muestra la lista de productos en un RecyclerView.
+ * Muestra la lista de productos en un RecyclerView. Un toque sobre el
+ * producto lo edita y el botón de la derecha lo elimina.
  */
 public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder> {
 
+    public interface Acciones {
+        void alEditar(Producto producto);
+
+        void alEliminar(Producto producto);
+    }
+
     private final List<Producto> productos = new ArrayList<>();
+    private final Acciones acciones;
+
+    public ProductoAdapter(Acciones acciones) {
+        this.acciones = acciones;
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setProductos(List<Producto> nuevos) {
@@ -49,6 +61,9 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 ? R.string.producto_activo : R.string.producto_inactivo);
         holder.tvEstado.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),
                 producto.isStatus() ? R.color.activo : R.color.inactivo));
+
+        holder.itemView.setOnClickListener(v -> acciones.alEditar(producto));
+        holder.buttonEliminar.setOnClickListener(v -> acciones.alEliminar(producto));
     }
 
     @Override
@@ -60,12 +75,14 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         final TextView tvNombre;
         final TextView tvCodigo;
         final TextView tvEstado;
+        final View buttonEliminar;
 
         ProductoViewHolder(@NonNull View vista) {
             super(vista);
             tvNombre = vista.findViewById(R.id.tvNombre);
             tvCodigo = vista.findViewById(R.id.tvCodigo);
             tvEstado = vista.findViewById(R.id.tvEstado);
+            buttonEliminar = vista.findViewById(R.id.buttonEliminar);
         }
     }
 }
