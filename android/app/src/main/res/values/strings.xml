@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Guía API REST</string>
+
+    <string name="login_titulo">Iniciar sesión</string>
+    <string name="login_subtitulo">Ingresa con tu cuenta para consultar los productos</string>
+    <string name="login_hint_usuario">Correo electrónico</string>
+    <string name="login_hint_clave">Contraseña</string>
+    <string name="login_boton_ingresar">Ingresar</string>
+    <string name="login_error_campos">Ingresa el correo y la contraseña</string>
+    <string name="login_error_credenciales">Correo o contraseña incorrectos</string>
+    <string name="login_error_red">No se pudo conectar con el servidor</string>
+    <string name="login_error_inesperado">Respuesta inesperada del servidor</string>
+
+    <string name="productos_titulo">Productos</string>
+    <string name="productos_vacio">No hay productos registrados</string>
+    <string name="productos_cerrar_sesion">Cerrar sesión</string>
+    <string name="productos_error_red">No se pudieron cargar los productos</string>
+    <string name="productos_reintentar">Reintentar</string>
+    <string name="productos_sesion_expirada">La sesión expiró, ingresa de nuevo</string>
+    <string name="producto_codigo">Código: %1$d</string>
+    <string name="producto_activo">Activo</string>
+    <string name="producto_inactivo">Inactivo</string>
+</resources>
