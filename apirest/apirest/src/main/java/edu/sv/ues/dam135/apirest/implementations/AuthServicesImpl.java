@@ -12,7 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
+import edu.sv.ues.dam135.apirest.dtos.UserRegisterDTO;
+import edu.sv.ues.dam135.apirest.entities.User;
+import edu.sv.ues.dam135.apirest.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @Service
@@ -48,5 +51,32 @@ public class AuthServicesImpl implements AuthServices {
             return null;
         }
         return null;
+    }
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public boolean register(UserRegisterDTO data) {
+        if (userRepository.findByEmail(data.getEmail()) != null) {
+            return false; // Ya existe una cuenta con ese correo
+        }
+
+        User user = new User();
+        user.setName(data.getName());
+        user.setLastname(data.getLastname());
+        user.setEmail(data.getEmail());
+        user.setPassword(passwordEncoder.encode(data.getPassword()));
+        user.setActive(true);
+
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public void logout(String token) {
+        jwtUtil.revokeToken(token);
     }
 }

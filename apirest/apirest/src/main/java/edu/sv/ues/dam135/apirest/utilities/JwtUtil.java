@@ -9,19 +9,41 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class JwtUtil {
 
     private String secretKey = "CPqiMDqBnNEXawGoFX7g";
 
+    private final ConcurrentMap<String, Date> revokedTokens =
+            new ConcurrentHashMap<>();
+
+    public void revokeToken(String token) {
+        revokedTokens.put(token, extractExpiration(token));
+    }
+
+    private boolean isTokenRevoked(String token) {
+        Date expiration = revokedTokens.get(token);
+
+        if (expiration == null) {
+            return false;
+        }
+
+        if (expiration.before(new Date())) {
+            revokedTokens.remove(token, expiration);
+            return false;
+        }
+
+        return true;
+    }
     public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
@@ -75,6 +97,9 @@ public class JwtUtil {
 
     public boolean validatedTokenPermission(String token) {
         try {
+            if (token == null || isTokenRevoked(token)) {
+                return false;
+            }
             String email = extractUsername(token);
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(

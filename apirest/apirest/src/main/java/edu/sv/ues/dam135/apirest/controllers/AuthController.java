@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import edu.sv.ues.dam135.apirest.dtos.UserRegisterDTO;
+import org.springframework.web.bind.annotation.RequestHeader;
+
 @Slf4j
 @RestController
 @RequestMapping("/auth")
@@ -34,5 +37,32 @@ public class AuthController {
             log.error("{}", e);
         }
         return null;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(
+            @RequestBody UserRegisterDTO user) {
+
+        boolean registered = authServices.register(user);
+
+        if (!registered) {
+            return ResponseEntity.status(409)
+                    .body("Ya existe una cuenta con ese correo");
+        }
+
+        return ResponseEntity.status(201)
+                .body("Usuario registrado correctamente");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestHeader("Authorization") String authorization) {
+
+        String token = authorization.startsWith("Bearer ")
+                ? authorization.substring(7)
+                : authorization;
+
+        authServices.logout(token);
+        return ResponseEntity.noContent().build();
     }
 }
