@@ -37,6 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (path.startsWith("/auth/login")
                 || path.startsWith("/auth/register")
                 || path.startsWith("/auth/verify-token")
+                || path.startsWith("/auth/register")
                 || path.startsWith("/swagger-ui/")
                 || path.startsWith("/v3/")) {
             filterChain.doFilter(request, response);
